@@ -1,12 +1,14 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
 
 app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return { "msg": "Hello Roma", "v": "0.2" }
+    return { "msg": "Hello Docker", "v": "0.2" }
 
 
-@app.get("/items/{id}")
-def read_item(item_id: int, q: str = None):
-    return {"id": id, "q": q}
+@app.get("/api/ip", response_class=HTMLResponse)
+def read_ip(request: Request):
+    ip = request.client.host
+    return f"<h1>Your IP is {ip}</h1>"
