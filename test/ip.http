@@ -1,0 +1,3 @@
+@apiUrl = https://roma-rahti-test-my-first-project.2.rahtiapp.fi
+
+GET {{apiUrl}}/api/ip
