@@ -31,3 +31,28 @@ def read_ip(request: Request):
 def read_ip(request: Request):
     ip = request.client.host
     return f"<h1>Your IP is {ip}</h1>"
+
+@app.get("/api/rooms")
+def read_rooms():
+    rooms = [
+        {"number": 1, "type": "Single"},
+        {"number": 2, "type": "Single"},
+        {"number": 3, "type": "Single"},
+        {"number": 4, "type": "Single"},
+        {"number": 5, "type": "Double"},
+        {"number": 6, "type": "Double"},
+        {"number": 7, "type": "Double"},
+        {"number": 8, "type": "Double"},
+        {"number": 9, "type": "Family"},
+        {"number": 10, "type": "Family"},
+        {"number": 11, "type": "Family"},
+        {"number": 12, "type": "Family"},
+        {"number": 13, "type": "Suite"},
+        {"number": 14, "type": "Suite"},
+        {"number": 15, "type": "Suite"},
+        {"number": 16, "type": "Suite"},
+        {"number": 17, "type": "Presidential"},
+        {"number": 18, "type": "Presidential"},
+    ]
+
+    return rooms
