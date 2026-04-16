@@ -26,6 +26,7 @@ class Booking(BaseModel):
     room_id: int
     date_from: date
     date_to: date
+    additional_info: str
 
 
 @app.get("/")
@@ -73,15 +74,17 @@ def create_booking(booking: Booking):
                 guest_id,
                 room_id,
                 date_from,
-                date_to
+                date_to,
+                additional_info
             ) VALUES (
-                %s, %s, %s, %s
+                %s, %s, %s, %s, %s
             ) RETURNING id
         """, [
             booking.guest_id,
             booking.room_id,
             booking.date_from,
             booking.date_to,
+            booking.additional_info
         ])
         result = cur.fetchone()
 
@@ -99,10 +102,30 @@ def get_bookings():
                 b.date_to,
                 r.room_number,
                 g.first_name,
-                g.last_name
+                g.last_name,
+                (b.date_to - b.date_from) AS nights,
+                ((b.date_to - b.date_from) * r.price) AS total_price
             FROM bookings b
-                Left JOIN rooms r ON b.room_id = r.id
-                LEFT JOIN guests g ON g.id = b.guest_id
+                INNER JOIN rooms r ON b.room_id = r.id
+                INNER JOIN guests g ON g.id = b.guest_id
+        """)
+        result = cur.fetchall()
+
+    return result
+
+@app.get("/api/guests")
+def get_guests():
+    with get_conn() as conn, conn.cursor() as cur:
+        cur.execute("""
+            SELECT
+                g.id,
+                g.first_name,
+                g.last_name,
+                g.address,
+                COUNT(b.id) AS total_visits
+            FROM guests g
+                LEFT JOIN bookings b ON b.guest_id = g.id
+                GROUP BY g.id
         """)
         result = cur.fetchall()
 

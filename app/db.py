@@ -29,8 +29,8 @@ def create_schema():
                             id SERIAL PRIMARY KEY,
                             guest_id INT REFERENCES guests(id) NOT NULL,
                             room_id INT REFERENCES rooms(id) NOT NULL,
-                            date_from TIMESTAMP NOT NULL,
-                            date_to TIMESTAMP NOT NULL,
+                            date_from DATE NOT NULL,
+                            date_to DATE NOT NULL,
                             CHECK (date_from < date_to),
                             additional_info VARCHAR
                         );
